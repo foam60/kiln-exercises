@@ -1,0 +1,77 @@
+[
+  {
+    "name": "KILN #1",
+    "description": "A confident bearded avatar with bold blue shades and a red-and-white cap proudly featuring the Kiln logo.",
+    "image": "ipfs://QmQ4DFYeYMgfGkT9vhnphw24Ea2rbX3ko67MK5UqBS7A1X/0.jpg",
+    "attributes": [
+      {
+        "trait_type": "Headwear",
+        "value": "Red & White Kiln Cap"
+      },
+      {
+        "trait_type": "Eyewear",
+        "value": "Blue Square Shades"
+      }
+    ]
+  },
+  {
+    "name": "KILN #2",
+    "description": "A cheerful character with a rainbow puff afro and big glasses, wearing Kiln gear with pastel vibes.",
+    "image": "ipfs://QmbPg1rZabe9q6CRTmrEBZYncEFt63AAQQerbdC7r2fZ1E/1.jpg",
+    "attributes": [
+      {
+        "trait_type": "Hair",
+        "value": "Rainbow Afro"
+      },
+      {
+        "trait_type": "Eyewear",
+        "value": "Retro Black Glasses"
+      }
+    ]
+  },
+  {
+    "name": "KILN #3",
+    "description": "A chill, tough persona with dark skin, a beanie, and a casual attitude, mid-smoke with Kiln branding on his tank.",
+    "image": "ipfs://QmUkitNjrnao5SB185sHYMSExkMzzZg4U859rPmJusTTZm/2.jpg",
+    "attributes": [
+      {
+        "trait_type": "Headwear",
+        "value": "Olive Beanie"
+      },
+      {
+        "trait_type": "Facial Accessory",
+        "value": "Cigarette"
+      }
+    ]
+  },
+  {
+    "name": "KILN #4",
+    "description": "A rebellious figure with a gold spiked crown, eyepatch, and unmistakable swagger—Kiln style in full force.",
+    "image": "ipfs://QmPdwht24WpHu88AX3MGEgm2SJfmWGL28Ek2dDX5Pe6BTr/3.jpg",
+    "attributes": [
+      {
+        "trait_type": "Headwear",
+        "value": "Gold Spiked Crown"
+      },
+      {
+        "trait_type": "Eye Accessory",
+        "value": "Black Eyepatch"
+      }
+    ]
+  },
+  {
+    "name": "KILN #5",
+    "description": "A techy, cyber-inspired punk with aqua skin and pixel shades, wearing a bright pink shirt and the Kiln logo loud and proud.",
+    "image": "ipfs://QmT3TKg1hv5PRaNBgRHxFz2cMkffpnu6gsm2oCHXJwD1e1/4.jpg",
+    "attributes": [
+      {
+        "trait_type": "Skin",
+        "value": "Aqua Blue"
+      },
+      {
+        "trait_type": "Headwear",
+        "value": "Purple Cap"
+      }
+    ]
+  }
+]
