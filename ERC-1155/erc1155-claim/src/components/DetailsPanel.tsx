@@ -1,4 +1,5 @@
 import { memo, useEffect, useState } from 'react'
+import { useAccount } from 'wagmi'
 import { useNft } from '../hooks/useNfts'
 import { useClaim } from '../hooks/useClaim'
 import { useBalance } from '../hooks/useBalance'
@@ -8,12 +9,14 @@ import shareLogo from '../assets/share-logo.png'
 import likeLogo from '../assets/like-logo.png'
 
 export const DetailsPanel = memo(function DetailsPanel({ selectedId }: { selectedId: string | null }) {
+  const { isConnected } = useAccount()
   const { data: selected, isLoading: loadingSelected } = useNft(selectedId || undefined)
   const { claim, isPending, isConfirming, isSuccess, error, hash } = useClaim()
   const { balance, refetch } = useBalance(selected ? parseInt(selected.id) : 0)
   const [localBalance, setLocalBalance] = useState(0)
   const [showSuccess, setShowSuccess] = useState(false)
   const [isLiked, setIsLiked] = useState(false)
+  const [walletError, setWalletError] = useState(false)
   
   // Update local balance when contract balance changes
   useEffect(() => {
@@ -31,7 +34,7 @@ export const DetailsPanel = memo(function DetailsPanel({ selectedId }: { selecte
       // Reset success state after 15 seconds
       const timer = setTimeout(() => {
         setShowSuccess(false)
-      }, 15000)
+      }, 7500)
       
       return () => clearTimeout(timer)
     }
@@ -40,7 +43,15 @@ export const DetailsPanel = memo(function DetailsPanel({ selectedId }: { selecte
   if (!selectedId && !selected) return <div className="text-slate-500">Select an NFT to view details</div>
   
   const handleClaim = () => {
+    if (!isConnected) {
+      setWalletError(true)
+      // Clear wallet error after 5 seconds
+      setTimeout(() => setWalletError(false), 5000)
+      return
+    }
+    
     if (selected) {
+      setWalletError(false)
       claim(parseInt(selected.id), 1)
     }
   }
@@ -155,7 +166,7 @@ export const DetailsPanel = memo(function DetailsPanel({ selectedId }: { selecte
           </div>
           
           {/* Status Section */}
-          {(isPending || isConfirming || showSuccess || error) && (
+          {(isPending || isConfirming || showSuccess || error || walletError) && (
             <div className="border border-slate-200 p-4 rounded-lg">
               <div className="flex items-center gap-3">
                 {/* Status Icon */}
@@ -173,7 +184,7 @@ export const DetailsPanel = memo(function DetailsPanel({ selectedId }: { selecte
                       </svg>
                     </div>
                   )}
-                  {error && (
+                  {(error || walletError) && (
                     <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
                       <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -202,7 +213,13 @@ export const DetailsPanel = memo(function DetailsPanel({ selectedId }: { selecte
                       <p className="text-xs text-slate-500">Your NFT has been added to your wallet</p>
                     </div>
                   )}
-                  {error && (
+                  {walletError && (
+                    <div>
+                      <p className="text-sm font-medium text-red-600">Wallet Not Connected</p>
+                      <p className="text-xs text-slate-500">Connect your wallet to claim NFT</p>
+                    </div>
+                  )}
+                  {error && !walletError && (
                     <div>
                       <p className="text-sm font-medium text-red-600">Transaction Failed</p>
                       <p className="text-xs text-slate-500">{error.message}</p>
