@@ -1,5 +1,4 @@
 import { useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
-import { parseEther } from 'viem'
 import Kiln1155ABI from '../abi/Kiln1155.json'
 
 const CONTRACT_ADDRESS = '0x4b37bEa1E4049dC2bD9d12EB2E0Df4792E4a5440'

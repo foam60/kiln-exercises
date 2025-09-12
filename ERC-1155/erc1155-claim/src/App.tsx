@@ -6,9 +6,9 @@ import { WalletStatus } from './components/WalletStatus'
 function Header() {
   return (
     <header className="border-b border-slate-200 bg-white">
-      <div className="mx-auto max-w-[1200px] w-full px-6 h-16 flex items-center justify-between">
+      <div className="mx-auto max-w-[1400px] w-full px-16 h-16 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <img src={kilnLogo} alt="Kiln" className="h-7 w-auto" />
+          <img src={kilnLogo} alt="Kiln" className="h-8 w-auto" />
         </div>
         <nav className="flex items-center gap-6 text-sm" />
         <WalletStatus />

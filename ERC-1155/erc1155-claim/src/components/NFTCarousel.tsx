@@ -36,5 +36,3 @@ export const NFTCarousel = memo(function NFTCarousel({ data, selectedId, onSelec
     </section>
   )
 })
-
-

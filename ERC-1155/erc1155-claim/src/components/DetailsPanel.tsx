@@ -13,6 +13,7 @@ export const DetailsPanel = memo(function DetailsPanel({ selectedId }: { selecte
   const { balance, refetch } = useBalance(selected ? parseInt(selected.id) : 0)
   const [localBalance, setLocalBalance] = useState(0)
   const [showSuccess, setShowSuccess] = useState(false)
+  const [isLiked, setIsLiked] = useState(false)
   
   // Update local balance when contract balance changes
   useEffect(() => {
@@ -43,6 +44,41 @@ export const DetailsPanel = memo(function DetailsPanel({ selectedId }: { selecte
       claim(parseInt(selected.id), 1)
     }
   }
+
+  const handleShare = async () => {
+    if (!selected) return
+
+    const shareData = {
+      title: selected.metadata.name,
+      text: `Check out this NFT: ${selected.metadata.name}`,
+      url: window.location.href,
+    }
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData)
+      } else {
+        // Fallback: copy to clipboard
+        await navigator.clipboard.writeText(window.location.href)
+        alert('Link copied to clipboard!')
+      }
+    } catch (error) {
+      console.error('Error sharing:', error)
+      // Fallback: copy to clipboard
+      try {
+        await navigator.clipboard.writeText(window.location.href)
+        alert('Link copied to clipboard!')
+      } catch (clipboardError) {
+        console.error('Error copying to clipboard:', clipboardError)
+        alert('Unable to share. Please copy the URL manually.')
+      }
+    }
+  }
+
+  const handleLike = () => {
+    setIsLiked(!isLiked)
+    // Here we could add API call to save like state
+  }
   return (
     <section>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -62,22 +98,44 @@ export const DetailsPanel = memo(function DetailsPanel({ selectedId }: { selecte
               <h1 className="text-slate-500 text-sm">You own {localBalance}</h1>
             </div>
             <div className="flex gap-2">
-              <button className="w-8 h-8 border border-slate-200 flex items-center justify-center hover:bg-slate-50 transition-colors">
+              <button 
+                onClick={handleShare}
+                className="w-8 h-8 border border-slate-300 flex items-center justify-center hover:bg-slate-100 transition-colors"
+                title="Share NFT"
+              >
                 <img src={shareLogo} alt="Share" className="w-4 h-4" />
               </button>
-              <button className="w-8 h-8 border border-slate-200 flex items-center justify-center hover:bg-slate-50 transition-colors">
-                <img src={likeLogo} alt="Like" className="w-4 h-4" />
+              <button 
+                onClick={handleLike}
+                className="w-8 h-8 border border-slate-300 flex items-center justify-center hover:bg-slate-100 transition-colors"
+                title={isLiked ? 'Unlike NFT' : 'Like NFT'}
+              >
+                <div className={`w-4 h-4 ${isLiked ? 'text-red-500' : 'text-black'}`}>
+                  <svg 
+                    viewBox="0 0 24 24" 
+                    fill={isLiked ? 'currentColor' : 'none'} 
+                    stroke="currentColor" 
+                    strokeWidth="2" 
+                    className="w-full h-full"
+                  >
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                  </svg>
+                </div>
               </button>
             </div>
           </div>
+
+          {/* Description */}
           {selected?.metadata.description && <p className="text-slate-500 leading-7">{selected.metadata.description}</p>}
+          
+          {/* Attributes */}
           {selected?.metadata.attributes?.length ? (
             <div>
-              <div className="flex flex-wrap gap-4 items-start justify-start">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {selected.metadata.attributes.map((attr, i) => (
-                  <div key={i} className="border border-slate-200 px-8 py-4 text-left w-fit">
-                    <div className="text-xs text-slate-500 uppercase mb-2 text-left">{attr.trait_type}</div>
-                    <div className="text-sm text-black text-left">{attr.value}</div>
+                  <div key={i} className="border border-slate-200 p-3">
+                    <div className="text-xs text-slate-500 uppercase mb-2">{attr.trait_type}</div>
+                    <div className="text-sm text-black">{attr.value}</div>
                   </div>
                 ))}
               </div>
@@ -159,7 +217,7 @@ export const DetailsPanel = memo(function DetailsPanel({ selectedId }: { selecte
           <button 
             onClick={handleClaim}
             disabled={isPending || isConfirming}
-            className={`w-full py-3 text-lg font-medium transition-all duration-200 ${
+            className={`w-full py-1 text-lg transition-all duration-200 ${
               isPending || isConfirming 
                 ? 'bg-slate-400 cursor-not-allowed' 
                 : showSuccess
