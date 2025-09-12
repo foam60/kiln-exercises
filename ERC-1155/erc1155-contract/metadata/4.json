@@ -1,0 +1,15 @@
+{
+    "name": "KILN #5",
+    "description": "A techy, cyber-inspired punk with aqua skin and pixel shades, wearing a bright pink shirt and the Kiln logo loud and proud.",
+    "image": "ipfs://QmT3TKg1hv5PRaNBgRHxFz2cMkffpnu6gsm2oCHXJwD1e1/4.jpg",
+    "attributes": [
+      {
+        "trait_type": "Skin",
+        "value": "Aqua Blue"
+      },
+      {
+        "trait_type": "Headwear",
+        "value": "Purple Cap"
+      }
+    ]
+  }

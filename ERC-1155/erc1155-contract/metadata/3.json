@@ -1,0 +1,15 @@
+{
+    "name": "KILN #4",
+    "description": "A rebellious figure with a gold spiked crown, eyepatch, and unmistakable swagger—Kiln style in full force.",
+    "image": "ipfs://QmPdwht24WpHu88AX3MGEgm2SJfmWGL28Ek2dDX5Pe6BTr/3.jpg",
+    "attributes": [
+      {
+        "trait_type": "Headwear",
+        "value": "Gold Spiked Crown"
+      },
+      {
+        "trait_type": "Eye Accessory",
+        "value": "Black Eyepatch"
+      }
+    ]
+  }

@@ -1,0 +1,15 @@
+{
+    "name": "KILN #2",
+    "description": "A cheerful character with a rainbow puff afro and big glasses, wearing Kiln gear with pastel vibes.",
+    "image": "ipfs://QmbPg1rZabe9q6CRTmrEBZYncEFt63AAQQerbdC7r2fZ1E/1.jpg",
+    "attributes": [
+      {
+        "trait_type": "Hair",
+        "value": "Rainbow Afro"
+      },
+      {
+        "trait_type": "Eyewear",
+        "value": "Retro Black Glasses"
+      }
+    ]
+  }

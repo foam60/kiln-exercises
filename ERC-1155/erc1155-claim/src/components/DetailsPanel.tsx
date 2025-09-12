@@ -1,11 +1,48 @@
-import { memo } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { useNft } from '../hooks/useNfts'
+import { useClaim } from '../hooks/useClaim'
+import { useBalance } from '../hooks/useBalance'
 import { resolveIpfsUrl } from '../lib/ipfs'
 import ethLogo from '../assets/eth-logo.png'
+import shareLogo from '../assets/share-logo.png'
+import likeLogo from '../assets/like-logo.png'
 
 export const DetailsPanel = memo(function DetailsPanel({ selectedId }: { selectedId: string | null }) {
   const { data: selected, isLoading: loadingSelected } = useNft(selectedId || undefined)
+  const { claim, isPending, isConfirming, isSuccess, error, hash } = useClaim()
+  const { balance, refetch } = useBalance(selected ? parseInt(selected.id) : 0)
+  const [localBalance, setLocalBalance] = useState(0)
+  const [showSuccess, setShowSuccess] = useState(false)
+  
+  // Update local balance when contract balance changes
+  useEffect(() => {
+    setLocalBalance(balance)
+  }, [balance])
+  
+  // Update local balance immediately when claim is successful
+  useEffect(() => {
+    if (isSuccess) {
+      setLocalBalance(prev => prev + 1)
+      setShowSuccess(true)
+      // Also refetch to ensure accuracy
+      refetch()
+      
+      // Reset success state after 15 seconds
+      const timer = setTimeout(() => {
+        setShowSuccess(false)
+      }, 15000)
+      
+      return () => clearTimeout(timer)
+    }
+  }, [isSuccess, refetch])
+  
   if (!selectedId && !selected) return <div className="text-slate-500">Select an NFT to view details</div>
+  
+  const handleClaim = () => {
+    if (selected) {
+      claim(parseInt(selected.id), 1)
+    }
+  }
   return (
     <section>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -19,13 +56,26 @@ export const DetailsPanel = memo(function DetailsPanel({ selectedId }: { selecte
           </div>
         </div>
         <div className="lg:col-span-6 space-y-5">
-          <h1 className="text-2xl font-semibold">{selected?.metadata.name || (loadingSelected ? 'Loading…' : '')}</h1>
-          {selected?.metadata.description && <p className="text-slate-600 leading-7">{selected.metadata.description}</p>}
+          <div className="flex justify-between items-start">
+            <div>
+              <h1 className="text-2xl font-semibold">{selected?.metadata.name || (loadingSelected ? 'Loading…' : '')}</h1>
+              <h1 className="text-slate-500 text-sm">You own {localBalance}</h1>
+            </div>
+            <div className="flex gap-2">
+              <button className="w-8 h-8 border border-slate-200 flex items-center justify-center hover:bg-slate-50 transition-colors">
+                <img src={shareLogo} alt="Share" className="w-4 h-4" />
+              </button>
+              <button className="w-8 h-8 border border-slate-200 flex items-center justify-center hover:bg-slate-50 transition-colors">
+                <img src={likeLogo} alt="Like" className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+          {selected?.metadata.description && <p className="text-slate-500 leading-7">{selected.metadata.description}</p>}
           {selected?.metadata.attributes?.length ? (
             <div>
               <div className="flex flex-wrap gap-4 items-start justify-start">
                 {selected.metadata.attributes.map((attr, i) => (
-                  <div key={i} className="border border-slate-200 px-8 py-5 text-left w-fit">
+                  <div key={i} className="border border-slate-200 px-8 py-4 text-left w-fit">
                     <div className="text-xs text-slate-500 uppercase mb-2 text-left">{attr.trait_type}</div>
                     <div className="text-sm text-black text-left">{attr.value}</div>
                   </div>
@@ -46,10 +96,94 @@ export const DetailsPanel = memo(function DetailsPanel({ selectedId }: { selecte
             </div>
           </div>
           
+          {/* Status Section */}
+          {(isPending || isConfirming || showSuccess || error) && (
+            <div className="border border-slate-200 p-4 rounded-lg">
+              <div className="flex items-center gap-3">
+                {/* Status Icon */}
+                <div className="flex-shrink-0">
+                  {isPending && (
+                    <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                  )}
+                  {isConfirming && (
+                    <div className="w-6 h-6 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+                  )}
+                  {isSuccess && (
+                    <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                      <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                  )}
+                  {error && (
+                    <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
+                      <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+                
+                {/* Status Text */}
+                <div className="flex-1">
+                  {isPending && (
+                    <div>
+                      <p className="text-sm font-medium text-blue-600">Confirming Transaction</p>
+                      <p className="text-xs text-slate-500">Please confirm the transaction in your wallet</p>
+                    </div>
+                  )}
+                  {isConfirming && (
+                    <div>
+                      <p className="text-sm font-medium text-orange-600">Claiming NFT</p>
+                      <p className="text-xs text-slate-500">Transaction is being processed on the blockchain</p>
+                    </div>
+                  )}
+                  {showSuccess && (
+                    <div>
+                      <p className="text-sm font-medium text-green-600">Successfully Claimed!</p>
+                      <p className="text-xs text-slate-500">Your NFT has been added to your wallet</p>
+                    </div>
+                  )}
+                  {error && (
+                    <div>
+                      <p className="text-sm font-medium text-red-600">Transaction Failed</p>
+                      <p className="text-xs text-slate-500">{error.message}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+          
           {/* Claim Now Button */}
-          <button className="w-full bg-black text-white py-1 text-lg hover:bg-slate-800">
-            Claim Now
+          <button 
+            onClick={handleClaim}
+            disabled={isPending || isConfirming}
+            className={`w-full py-3 text-lg font-medium transition-all duration-200 ${
+              isPending || isConfirming 
+                ? 'bg-slate-400 cursor-not-allowed' 
+                : showSuccess
+                ? 'bg-green-600 hover:bg-green-700'
+                : 'bg-black hover:bg-slate-800'
+            } text-white`}
+          >
+            {isPending ? 'Confirming...' : isConfirming ? 'Claiming...' : showSuccess ? 'Claimed!' : 'Claim Now'}
           </button>
+          
+          {/* BaseScan Button - Show only on success */}
+          {showSuccess && hash && (
+            <a
+              href={`https://sepolia.basescan.org/tx/${hash}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full py-2 px-4 text-sm font-medium text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors duration-200 flex items-center justify-center gap-2"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+              View on BaseScan
+            </a>
+          )}
         </div>
       </div>
     </section>

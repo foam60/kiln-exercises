@@ -1,0 +1,15 @@
+{
+    "name": "KILN #3",
+    "description": "A chill, tough persona with dark skin, a beanie, and a casual attitude, mid-smoke with Kiln branding on his tank.",
+    "image": "ipfs://QmUkitNjrnao5SB185sHYMSExkMzzZg4U859rPmJusTTZm/2.jpg",
+    "attributes": [
+      {
+        "trait_type": "Headwear",
+        "value": "Olive Beanie"
+      },
+      {
+        "trait_type": "Facial Accessory",
+        "value": "Cigarette"
+      }
+    ]
+  }

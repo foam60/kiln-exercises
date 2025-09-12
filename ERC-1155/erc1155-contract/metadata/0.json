@@ -1,0 +1,15 @@
+{
+    "name": "KILN #1",
+    "description": "A confident bearded avatar with bold blue shades and a red-and-white cap proudly featuring the Kiln logo.",
+    "image": "ipfs://QmQ4DFYeYMgfGkT9vhnphw24Ea2rbX3ko67MK5UqBS7A1X/0.jpg",
+    "attributes": [
+      {
+        "trait_type": "Headwear",
+        "value": "Red & White Kiln Cap"
+      },
+      {
+        "trait_type": "Eyewear",
+        "value": "Blue Square Shades"
+      }
+    ]
+  }
