@@ -1,7 +1,7 @@
 import { useReadContract, useAccount } from 'wagmi'
 import Kiln1155ABI from '../abi/Kiln1155.json'
 
-const CONTRACT_ADDRESS = '0x4b37bEa1E4049dC2bD9d12EB2E0Df4792E4a5440'
+const CONTRACT_ADDRESS = '0x285C8b243838dA7Fe80EE161834a3f54f9f29e5c'
 
 export function useBalance(tokenId: number) {
   const { address } = useAccount()

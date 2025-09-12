@@ -3,6 +3,7 @@ pragma solidity ^0.8.28;
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 
 /**
  * @title Kiln1155
@@ -24,6 +25,16 @@ contract Kiln1155 is ERC1155, Ownable {
      * @param baseURI The base URI for token metadata
      */
     constructor(string memory baseURI) ERC1155(baseURI) Ownable(msg.sender) {}
+
+    /**
+     * @notice Override the uri function to return the correct metadata URI for each token
+     * @dev Constructs the full metadata URI by appending the token ID to the base URI
+     * @param tokenId The token ID to get metadata for
+     * @return The full metadata URI for the token
+     */
+    function uri(uint256 tokenId) public view override returns (string memory) {
+        return string(abi.encodePacked(super.uri(0), Strings.toString(tokenId), ".json"));
+    }
 
     /**
      * @notice Allows users to claim tokens
