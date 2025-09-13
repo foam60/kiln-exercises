@@ -1,0 +1,10 @@
+[test]
+root = "./tests"
+
+# Multiple patterns
+coveragePathIgnorePatterns = [
+  "erc4626-vault/lib/**",       # ignore all OpenZeppelin tests
+  "node_modules/**",            # ignore dependencies
+  "**/*.spec.ts",               # ignore any spec files
+  "**/*.test.js"                # ignore JS test files (like OpenZeppelin's Hardhat tests)
+]

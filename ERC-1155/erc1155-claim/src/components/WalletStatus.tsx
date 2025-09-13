@@ -25,7 +25,7 @@ export function WalletStatus() {
   return (
     <div className="flex items-center gap-3">
       <div className="text-sm text-slate-700">
-        {balance ? `${new Intl.NumberFormat(undefined, { maximumSignificantDigits: 5 }).format(Number(balance.formatted))} ${balance.symbol}` : '—'}
+        {balance ? `${new Intl.NumberFormat(undefined, { maximumSignificantDigits: 3 }).format(Number(balance.formatted))} ${balance.symbol}` : '—'}
       </div>
       <div className="text-sm text-slate-500 hidden sm:block">{address?.slice(0, 6)}…{address?.slice(-4)}</div>
       <button className="border border-slate-200 px-3 py-1.5 text-sm" onClick={() => disconnect()}>

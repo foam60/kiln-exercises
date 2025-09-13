@@ -15,14 +15,14 @@ function Gallery() {
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const { data, isLoading, error } = useNfts()
 
-  // Initialize selection with first NFT
+  // Initialize selection with the first NFT
   useEffect(() => {
     if (!selectedId && data && data.length > 0) {
       setSelectedId(data[0].id)
     }
   }, [data, selectedId])
 
-  // Stable select handler MUST be declared before early returns
+  // Select handler
   const handleSelect = useCallback((id: string) => setSelectedId(id), [])
 
   if (isLoading) return <div className="text-slate-500">Loading NFTs…</div>
@@ -31,10 +31,13 @@ function Gallery() {
 
   return (
     <div className="space-y-10">
+      {/* DetailsPanel */}
       <DetailsPanel selectedId={selectedId} />
 
+      {/* KilnCard */}
       <KilnCard />
 
+      {/* NFTCarousel */}
       <NFTCarousel data={data} selectedId={selectedId} onSelect={handleSelect} />
     </div>
   )

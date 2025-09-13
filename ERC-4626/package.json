@@ -7,9 +7,10 @@
     "@types/bun": "latest"
   },
   "peerDependencies": {
-    "typescript": "^5"
+    "typescript": "^5.9.2"
   },
   "dependencies": {
+    "tsx": "^4.20.5",
     "viem": "^2.37.5"
   }
 }

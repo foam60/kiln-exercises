@@ -22,5 +22,3 @@ export function useNft(id: string | undefined) {
     gcTime: 10 * 60 * 1000,
   })
 }
-
-
