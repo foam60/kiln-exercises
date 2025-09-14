@@ -6,7 +6,6 @@ import { useBalance } from '../hooks/useBalance'
 import { resolveIpfsUrl } from '../lib/ipfs'
 import ethLogo from '../assets/eth-logo.png'
 import shareLogo from '../assets/share-logo.png'
-import likeLogo from '../assets/like-logo.png'
 
 export const DetailsPanel = memo(function DetailsPanel({ selectedId }: { selectedId: string | null }) {
   const { isConnected } = useAccount()
@@ -86,10 +85,12 @@ export const DetailsPanel = memo(function DetailsPanel({ selectedId }: { selecte
     }
   }
 
+  // Like button handler - not connected to backend, just local state
   const handleLike = () => {
     setIsLiked(!isLiked)
     // Here we could add API call to save like state
   }
+
   return (
     <section>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -167,7 +168,7 @@ export const DetailsPanel = memo(function DetailsPanel({ selectedId }: { selecte
           
           {/* Status Section */}
           {(isPending || isConfirming || showSuccess || error || walletError) && (
-            <div className="border border-slate-200 p-4 rounded-lg">
+            <div className="border border-slate-200 p-4">
               <div className="flex items-center gap-3">
                 {/* Status Icon */}
                 <div className="flex-shrink-0">

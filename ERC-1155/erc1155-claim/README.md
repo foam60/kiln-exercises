@@ -1,6 +1,6 @@
 # ERC-1155 NFT Claim dApp
 
-A React + TypeScript dApp for viewing and claiming ERC-1155 NFTs on the Base Sepolia testnet.
+A React/Vite + TypeScript dApp for viewing and claiming ERC-1155 NFTs on the Base Sepolia testnet.
 
 ## 🚀 Features
 
