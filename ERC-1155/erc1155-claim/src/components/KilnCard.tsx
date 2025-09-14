@@ -7,7 +7,7 @@ import arrowLogo from '../assets/arrow.png'
 export function KilnCard() {
   return (
     <section>
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"> 
         <div className="lg:col-span-6">
           <div className="border border-slate-200 p-6">
           <div className="flex items-start gap-4 mb-4">

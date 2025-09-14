@@ -52,76 +52,80 @@ export function loadArtifact(name: string) {
  * @throws {AmountExceedsMaxDepositError} if the amount exceeds the max deposit
  */
 export async function deposit(
-    client: PublicClient,
-    { wallet, vault, amount }: DepositParams,
-  ): Promise<Transaction> {
-    // console.log("Deposit amount:", formatEther(amount), "ETH");
-    
-    // load ERC20 + ERC4626 ABIs
-    const erc20 = loadArtifact("USDK").abi;
-    const vaultAbi = loadArtifact("SimpleERC4626").abi;
-  
-    // get asset address first
-    const asset = await client.readContract({
-      address: vault,
-      abi: vaultAbi,
-      functionName: "asset",
-      args: [],
-    }) as `0x${string}`;
+  client: PublicClient,
+  { wallet, vault, amount }: DepositParams,
+): Promise<Transaction> {
+  // console.log("Deposit amount:", formatEther(amount), "ETH");
 
-    // console.log("asset address", asset);
-
-    // 1. check maxDeposit first
-    const maxDeposit: bigint = await client.readContract({
-      address: vault,
-      abi: vaultAbi,
-      functionName: "maxDeposit",
-      args: [wallet],
-    }) as bigint;
-
-    // console.log("maxDeposit", formatEther(maxDeposit), "USDK");
-
-    if (amount > maxDeposit) throw new AmountExceedsMaxDepositError();
-  
-    // 2. check balance
-    const balance: bigint = await client.readContract({
-      address: asset,
-      abi: erc20,
-      functionName: "balanceOf",
-      args: [wallet],
-    }) as bigint;
-
-    // console.log("balance", formatEther(balance), "USDK");
-  
-    if (balance < amount) throw new NotEnoughBalanceError();
-  
-    // 3. check allowance
-    const allowance: bigint = await client.readContract({
-      address: asset,
-      abi: erc20,
-      functionName: "allowance",
-      args: [wallet, vault],
-    }) as bigint;
-  
-    // console.log("allowance", formatEther(allowance), "USDK");
-  
-    if (allowance < amount) throw new MissingAllowanceError();
-  
-    // 4. prepare tx
-    const data = encodeFunctionData({
-      abi: vaultAbi,
-      functionName: "deposit",
-      args: [amount, wallet],
-    });
-
-    // console.log("data", data);
-  
-    return {
-      data,
-      from: wallet,
-      to: vault,
-      value: 0n,
-      gas: 200000n,
-    };
+  if (amount <= 0n) {
+    return Promise.reject(new Error("Deposit amount must be greater than zero"));
   }
-  
+
+  // load ERC20 + ERC4626 ABIs
+  const erc20 = loadArtifact("USDK").abi;
+  const vaultAbi = loadArtifact("SimpleERC4626").abi;
+
+  // get asset address first
+  const asset = await client.readContract({
+    address: vault,
+    abi: vaultAbi,
+    functionName: "asset",
+    args: [],
+  }) as `0x${string}`;
+
+  // console.log("asset address", asset);
+
+  // 1. check maxDeposit first
+  const maxDeposit: bigint = await client.readContract({
+    address: vault,
+    abi: vaultAbi,
+    functionName: "maxDeposit",
+    args: [wallet],
+  }) as bigint;
+
+  // console.log("maxDeposit", formatEther(maxDeposit), "USDK");
+
+  if (amount > maxDeposit) throw new AmountExceedsMaxDepositError();
+
+  // 2. check balance
+  const balance: bigint = await client.readContract({
+    address: asset,
+    abi: erc20,
+    functionName: "balanceOf",
+    args: [wallet],
+  }) as bigint;
+
+  // console.log("balance", formatEther(balance), "USDK");
+
+  if (balance < amount) throw new NotEnoughBalanceError();
+
+  // 3. check allowance
+  const allowance: bigint = await client.readContract({
+    address: asset,
+    abi: erc20,
+    functionName: "allowance",
+    args: [wallet, vault],
+  }) as bigint;
+
+  // console.log("allowance", formatEther(allowance), "USDK");
+
+  if (allowance < amount) throw new MissingAllowanceError();
+
+  // 4. prepare tx
+  const data = encodeFunctionData({
+    abi: vaultAbi,
+    functionName: "deposit",
+    args: [amount, wallet],
+  });
+
+  // console.log("data", data);
+
+  return {
+    data,
+    from: wallet,
+    to: vault,
+    value: 0n,
+    gas: 200000n,
+  };
+}
+
