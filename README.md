@@ -2,6 +2,16 @@
 
 This repository contains multiple independent exercises and sample projects. Use the sections below to navigate and run each one.
 
+### Frontend screenshots
+
+No wallet connected:
+
+![No wallet connected](./docs/Front-1.png)
+
+After NFT claimed:
+
+![NFT claimed](./docs/Front-2.png)
+
 ### Repository structure
 
 - `ERC-1155/erc1155-contract` — Hardhat 3 project with an ERC‑1155 contract (`Kiln1155`) and tests.

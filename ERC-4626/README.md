@@ -58,6 +58,29 @@ bun test --coverage
 
 This will execute all tests and provide coverage information for the TypeScript code.
 
+### Sample output
+
+```bash
+bun test v1.2.21 (7c45ed97)
+
+tests/deposit.test.ts:
+✓ successful deposit [30.20ms]
+✓ throws NotEnoughBalanceError [3.08ms]
+✓ throws MissingAllowanceError [3.15ms]
+✓ throws AmountExceedsMaxDepositError [7.89ms]
+✓ throws on zero deposit [0.19ms]
+-----------|---------|---------|-------------------
+File       | % Funcs | % Lines | Uncovered Line #s
+-----------|---------|---------|-------------------
+All files  |  100.00 |  100.00 |
+ index.ts  |  100.00 |  100.00 | 
+-----------|---------|---------|-------------------
+
+ 5 pass
+ 0 fail
+ 7 expect() calls
+Ran 5 tests across 1 file. [362.00ms]
+```
 
 ## 📋 Smart Contracts
 
