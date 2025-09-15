@@ -40,19 +40,23 @@ npx hardhat compile --profile production
 
 ## Configure Base Sepolia
 
-The `baseSepolia` network is defined in `hardhat.config.ts` and uses configuration variables:
+The `baseSepolia` network is defined in `hardhat.config.ts` and uses configuration variables managed via Hardhat Keystore:
 
 - `BASE_SEPOLIA_RPC_URL`
 - `BASE_SEPOLIA_PRIVATE_KEY`
 
-Set them as environment variables before running commands:
+Set them with the keystore commands:
 
 ```shell
-export BASE_SEPOLIA_RPC_URL="https://base-sepolia.g.alchemy.com/v2/yourKey" \
-       BASE_SEPOLIA_PRIVATE_KEY="0xYourPrivateKey"
+npx hardhat keystore set BASE_SEPOLIA_RPC_URL
+npx hardhat keystore set BASE_SEPOLIA_PRIVATE_KEY
 ```
 
-Alternatively, you can use a shell env file (`.env`) and `export $(cat .env | xargs)` prior to commands.
+You can review stored values with:
+
+```shell
+npx hardhat keystore list
+```
 
 ## Deploy to Base Sepolia (Ignition)
 
