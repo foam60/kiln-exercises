@@ -1,57 +1,87 @@
-# Sample Hardhat 3 Beta Project (`node:test` and `viem`)
+# Kiln1155 ERC-1155 Contract (Hardhat 3 + Ignition + viem)
 
-This project showcases a Hardhat 3 Beta project using the native Node.js test runner (`node:test`) and the `viem` library for Ethereum interactions.
-
-To learn more about the Hardhat 3 Beta, please visit the [Getting Started guide](https://hardhat.org/docs/getting-started#getting-started-with-hardhat-3). To share your feedback, join our [Hardhat 3 Beta](https://hardhat.org/hardhat3-beta-telegram-group) Telegram group or [open an issue](https://github.com/NomicFoundation/hardhat/issues/new) in our GitHub issue tracker.
+This project contains an ERC-1155 contract (`Kiln1155`) and a Hardhat 3 setup with Ignition for deployments and `viem` for interactions.
 
 ## Project Overview
 
-This example project includes:
+- **Contract**: `Kiln1155.sol` — simple claimable ERC-1155 with capped supply per token ID
+- **Deployment**: Ignition module `ignition/modules/Kiln1155.ts`
+- **Network**: Ready for Base Sepolia via `hardhat.config.ts` (`baseSepolia` network)
 
-- A simple Hardhat configuration file.
-- Foundry-compatible Solidity unit tests.
-- TypeScript integration tests using [`node:test`](nodejs.org/api/test.html), the new Node.js native test runner, and [`viem`](https://viem.sh/).
-- Examples demonstrating how to connect to different types of networks, including locally simulating OP mainnet.
+## contracts/
 
-## Usage
+- `contracts/Kiln1155.sol`
+  - Inherits OpenZeppelin `ERC1155` and `Ownable`.
+  - `MAX_SUPPLY = 1000` per token ID.
+  - `uri(uint256 tokenId)` overrides base to return `<baseURI>/<tokenId>.json`.
+  - `claim(uint256 id, uint256 amount)` mints to `msg.sender` with checks:
+    - `id` must be 0–4
+    - `totalMinted[id] + amount <= MAX_SUPPLY`
 
-### Running Tests
+## Prerequisites
 
-To run all the tests in the project, execute the following command:
+- Node.js 18+
+- An account with funds on Base Sepolia
+- A Base Sepolia RPC URL
 
-```shell
-npx hardhat test
-```
-
-You can also selectively run the Solidity or `node:test` tests:
-
-```shell
-npx hardhat test solidity
-npx hardhat test nodejs
-```
-
-### Make a deployment to Sepolia
-
-This project includes an example Ignition module to deploy the contract. You can deploy this module to a locally simulated chain or to Sepolia.
-
-To run the deployment to a local chain:
+## Install
 
 ```shell
-npx hardhat ignition deploy ignition/modules/Counter.ts
+pnpm i || yarn || npm i
 ```
 
-To run the deployment to Sepolia, you need an account with funds to send the transaction. The provided Hardhat configuration includes a Configuration Variable called `SEPOLIA_PRIVATE_KEY`, which you can use to set the private key of the account you want to use.
-
-You can set the `SEPOLIA_PRIVATE_KEY` variable using the `hardhat-keystore` plugin or by setting it as an environment variable.
-
-To set the `SEPOLIA_PRIVATE_KEY` config variable using `hardhat-keystore`:
+## Build/Compile
 
 ```shell
-npx hardhat keystore set SEPOLIA_PRIVATE_KEY
+npx hardhat compile
+# or optimized build profile
+npx hardhat compile --profile production
 ```
 
-After setting the variable, you can run the deployment with the Sepolia network:
+## Configure Base Sepolia
+
+The `baseSepolia` network is defined in `hardhat.config.ts` and uses configuration variables:
+
+- `BASE_SEPOLIA_RPC_URL`
+- `BASE_SEPOLIA_PRIVATE_KEY`
+
+Set them as environment variables before running commands:
 
 ```shell
-npx hardhat ignition deploy --network sepolia ignition/modules/Counter.ts
+export BASE_SEPOLIA_RPC_URL="https://base-sepolia.g.alchemy.com/v2/yourKey" \
+       BASE_SEPOLIA_PRIVATE_KEY="0xYourPrivateKey"
 ```
+
+Alternatively, you can use a shell env file (`.env`) and `export $(cat .env | xargs)` prior to commands.
+
+## Deploy to Base Sepolia (Ignition)
+
+The Ignition module `Kiln1155.ts` deploys the contract with a preconfigured IPFS base URI.
+
+```shell
+npx hardhat ignition deploy --network baseSepolia ignition/modules/Kiln1155.ts
+```
+
+Output will include the deployed `Kiln1155` address. Save it for interactions.
+
+## Interact (examples)
+
+Using Hardhat console with viem client (read-only sample):
+
+```shell
+npx hardhat console --network baseSepolia
+```
+
+```js
+// in console
+const [client, account] = await viem.getPublicClient();
+// read the base URI (id 0 is ignored in override; it returns base)
+// you can verify a token URI with tokenId, e.g., 0
+```
+
+Using `claim` requires writing a transaction from a funded account. You can add a small script or call via a dapp/wallet after deployment.
+
+## Notes
+
+- Base URI used at deployment is set in `ignition/modules/Kiln1155.ts`. Update it there if you host different metadata.
+- The owner is set to the deployer via `Ownable(msg.sender)` in the constructor.
