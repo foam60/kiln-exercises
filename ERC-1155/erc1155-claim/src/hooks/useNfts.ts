@@ -3,6 +3,7 @@ import { listNfts, getNft } from '../lib/api'
 import type { NFT } from '../types/nft'
 
 export function useNfts() {
+  // Fetch all NFTs
   return useQuery({
     queryKey: ['nfts'],
     queryFn: listNfts, // Fetch all NFTs
@@ -13,6 +14,7 @@ export function useNfts() {
 }
 
 export function useNft(id: string | undefined) {
+  // Fetch a single NFT by ID
   return useQuery<NFT | null>({
     queryKey: ['nft', id],
     queryFn: async () => (id ? getNft(id) : null), // Fetch a single NFT by ID

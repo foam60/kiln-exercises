@@ -12,8 +12,8 @@ import { KilnCard } from './components/KilnCard'
 import { NFTCarousel } from './components/NFTCarousel'
 
 function Gallery() {
-  const [selectedId, setSelectedId] = useState<string | null>(null)
-  const { data, isLoading, error } = useNfts()
+  const [selectedId, setSelectedId] = useState<string | null>(null) // Selected NFT ID
+  const { data, isLoading, error } = useNfts() // NFTs data
 
   // Initialize selection with the first NFT
   useEffect(() => {
@@ -25,9 +25,9 @@ function Gallery() {
   // Select handler
   const handleSelect = useCallback((id: string) => setSelectedId(id), [])
 
-  if (isLoading) return <div className="text-slate-500">Loading NFTs…</div>
-  if (error) return <div className="text-red-600">Failed to load NFTs</div>
-  if (!data?.length) return <div className="text-slate-500">No NFTs found</div>
+  if (isLoading) return <div className="text-slate-500">Loading NFTs…</div> // If loading, show a loading message
+  if (error) return <div className="text-red-600">Failed to load NFTs</div> // If error, show a error message
+  if (!data?.length) return <div className="text-slate-500">No NFTs found</div> // If no NFTs found, show a message
 
   return (
     <div className="space-y-10">
@@ -43,7 +43,7 @@ function Gallery() {
   )
 }
 
-const router = createBrowserRouter([
+const router = createBrowserRouter([ // Router configuration
   {
     path: '/',
     element: <App />,
@@ -53,7 +53,7 @@ const router = createBrowserRouter([
   },
 ])
 
-const queryClient = new QueryClient({
+const queryClient = new QueryClient({ // Query client configuration
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
@@ -62,8 +62,8 @@ const queryClient = new QueryClient({
   },
 })
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
+createRoot(document.getElementById('root')!).render( // Render the app
+  <StrictMode> 
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />

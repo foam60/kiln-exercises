@@ -105,5 +105,3 @@ bun test tests/deposit.test.ts --coverage
 
 - Each exercise is self-contained; follow the respective README/spec inside its folder.
 - The contract project README in `ERC-1155/erc1155-contract/README.md` includes network config and deployment details.
-
-

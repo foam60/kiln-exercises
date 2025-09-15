@@ -1,9 +1,12 @@
 const DEFAULT_GATEWAY = 'https://ipfs.io/ipfs/'
 
 export function resolveIpfsUrl(url: string | undefined, gateway: string = DEFAULT_GATEWAY): string | undefined {
+  // If no URL, return the URL
   if (!url) return url
+  // If the URL starts with http://, https://, or data:, return the URL
   if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) return url
 
+  // If the URL starts with ipfs://
   if (url.startsWith('ipfs://')) {
     // Support formats like ipfs://<cid>/<path> or ipfs://ipfs/<cid>/<path>
     const withoutScheme = url.replace('ipfs://', '') // remove ipfs://
@@ -13,6 +16,7 @@ export function resolveIpfsUrl(url: string | undefined, gateway: string = DEFAUL
     return `${gateway}${cid}${rest ? `/${rest}` : ''}` // construct the URL
   }
 
+  // Return the URL
   return url
 }
 

@@ -39,9 +39,11 @@ export const DetailsPanel = memo(function DetailsPanel({ selectedId }: { selecte
     }
   }, [isSuccess, refetch])
   
+  // If no NFT is selected, show a message
   if (!selectedId && !selected) return <div className="text-slate-500">Select an NFT to view details</div>
   
   const handleClaim = () => {
+    // If the wallet is not connected, show an error
     if (!isConnected) {
       setWalletError(true)
       // Clear wallet error after 5 seconds
@@ -55,6 +57,7 @@ export const DetailsPanel = memo(function DetailsPanel({ selectedId }: { selecte
     }
   }
 
+  // Share button handler
   const handleShare = async () => {
     if (!selected) return
 
@@ -93,7 +96,9 @@ export const DetailsPanel = memo(function DetailsPanel({ selectedId }: { selecte
 
   return (
     <section>
+
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* NFT Image */}
         <div className="lg:col-span-6">
           <div className="aspect-square w-full border border-slate-200 bg-slate-100 overflow-hidden">
             {selected ? (
@@ -103,6 +108,8 @@ export const DetailsPanel = memo(function DetailsPanel({ selectedId }: { selecte
             )}
           </div>
         </div>
+
+        {/* Share and Like Buttons */}
         <div className="lg:col-span-6 space-y-5">
           <div className="flex justify-between items-start">
             <div>

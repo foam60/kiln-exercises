@@ -10,6 +10,7 @@ export function KilnCard() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"> 
         <div className="lg:col-span-6">
           <div className="border border-slate-200 p-6">
+          {/* Kiln Logo */}
           <div className="flex items-start gap-4 mb-4">
             <div className="relative">
               <img src={kilnLogo} alt="Kiln" className="h-12 w-12 rounded-full object-contain border border-slate-200" />
@@ -22,9 +23,11 @@ export function KilnCard() {
               <div className="text-l text-slate-500">@Kiln</div>
             </div>
           </div>
+          {/* Kiln Description */}
           <p className="text-sm text-slate-600 mb-4 leading-relaxed">
             Hundreds of companies use Kiln to earn rewards on their digital assets, or to whitelabel earning functionality into their products.
           </p>
+          {/* Kiln Social Links */}
           <div className="flex items-center gap-4 mb-4">
             <a href="https://twitter.com/kiln_finance" target="_blank" className="flex items-center gap-2 text-black hover:text-slate-800">
               <img src={xLogo} alt="X" className="w-5 h-5" />
@@ -35,6 +38,7 @@ export function KilnCard() {
               <span className="text-base">@Kiln</span>
             </a>
           </div>
+          {/* Kiln Website */}
           <div className="flex items-center gap-2">
             <a href="https://kiln.fi" target="_blank" className="flex-1 bg-black text-white px-4 py-2 text-sm hover:bg-slate-800 text-center">
               Website

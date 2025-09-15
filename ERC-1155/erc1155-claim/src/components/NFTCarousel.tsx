@@ -5,8 +5,10 @@ import { getNft } from '../lib/api'
 import type { useNfts } from '../hooks/useNfts'
 
 export const NFTCarousel = memo(function NFTCarousel({ data, selectedId, onSelect }: { data: ReturnType<typeof useNfts>['data']; selectedId: string | null; onSelect: (id: string) => void }) {
-  const carouselRef = useRef<HTMLDivElement>(null)
-  const queryClient = useQueryClient()
+  const carouselRef = useRef<HTMLDivElement>(null) // Ref to the carousel element
+  const queryClient = useQueryClient() // Query client for prefetching
+
+  // If no data, return null
   if (!data?.length) return null
   
   // Filter out the selected NFT and limit to 4 items
@@ -17,6 +19,7 @@ export const NFTCarousel = memo(function NFTCarousel({ data, selectedId, onSelec
       <h2 className="text-lg font-semibold mb-3">More from this collection</h2>
       <div ref={carouselRef} className="w-full flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2 scrollbar-hide">
         {filteredData.map((nft) => (
+          // Button for each NFT
           <button
             key={nft.id}
             onClick={() => onSelect(nft.id)}
@@ -25,7 +28,9 @@ export const NFTCarousel = memo(function NFTCarousel({ data, selectedId, onSelec
               selectedId === nft.id ? 'border-brand-500' : 'border-slate-200'
             }`}
           >
+            {/* NFT Image */}
             <img src={resolveIpfsUrl(nft.metadata.image)} alt={nft.metadata.name} className="aspect-square w-full object-cover bg-slate-100 transition-transform duration-300 hover:scale-105" />
+            {/* NFT Name and Price */}
             <div className="p-3">
               <div className="text-l font-medium">{nft.metadata.name}</div>
               <div className="text-sm font-medium text-slate-500">0.0 ETH</div>
