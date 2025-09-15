@@ -36,18 +36,46 @@ Spec: `ERC-1155/erc1155-claim.md`
 - Build a React + TypeScript dApp to browse and mint the ERC‑1155 NFTs on Base Sepolia.
 - Uses a provided API for gallery data and wallet interactions via Wagmi/Viem.
 
+Simple structure (suggested):
+
+```
+erc1155-dapp/
+├─ src/
+│  ├─ components/         # Gallery, NFTCard, WalletStatus, ClaimButton
+│  ├─ hooks/              # useWallet, useClaim, useNfts
+│  ├─ lib/                # wagmi/viem client, contract config
+│  ├─ abi/                # contract ABIs (Kiln1155.json)
+│  ├─ types/              # TypeScript types (NFT, API responses)
+│  ├─ assets/             # static assets (logos, icons, images)
+│  ├─ pages/              # routes (Home, Details)
+│  └─ main.tsx            # app bootstrap
+├─ public/
+├─ index.html
+├─ package.json
+└─ tsconfig.json
+```
+
+Common commands (run inside your dApp folder):
+
+```bash
+npm i
+npm run dev
+```
+
 ### ERC‑4626 deposit exercise
 
 Spec: `ERC-4626/erc4626-deposit.md`
 
-- Implement a `deposit` function against an ERC‑4626-compliant vault using viem.
+- Implement a `deposit` function for an ERC‑4626-compliant vault using viem.
 - Provide tests with Anvil.
 
 Structure:
 
 ```
 ERC-4626/
-├─ erc4626-vault/         # Foundry contracts (USDK token, SimpleERC4626 vault)
+├─ erc4626-vault/         # Foundry project
+│  ├─ src/                # Solidity contracts (USDK.sol, SimpleERC4626.sol)
+│  ├─ test/               # Foundry Solidity tests
 │  └─ out/                # Built artifacts used by TypeScript (after forge build)
 ├─ index.ts               # deposit() implementation building a tx for vault.deposit
 ├─ tests/
